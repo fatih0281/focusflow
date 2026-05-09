@@ -12,9 +12,9 @@ const firebaseConfig = {
     measurementId: "G-K4L98YC68V"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+// Firebase'i Başlat
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 document.addEventListener("DOMContentLoaded", () => {
     const loader = document.getElementById('loader');
