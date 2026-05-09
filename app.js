@@ -1,13 +1,10 @@
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
+// 1. Gerekli Firebase Modüllerini İçe Aktarıyoruz (SADECE JAVASCRIPT, HTML ETİKETİ YOK)
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-app.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-analytics.js";
+import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.13.0/firebase-firestore.js";
 
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
+// 2. Senin Firebase Konfigürasyonun
+const firebaseConfig = {
     apiKey: "AIzaSyA2QmLBjaCFQmV6DjhoCiBG0HihY4AALXk",
     authDomain: "focusflow-85056.firebaseapp.com",
     projectId: "focusflow-85056",
@@ -15,13 +12,14 @@
     messagingSenderId: "221972136729",
     appId: "1:221972136729:web:35c3526501b678038afb88",
     measurementId: "G-K4L98YC68V"
-  };
+};
 
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
+// 3. Firebase'i, Analytics'i ve Firestore Veritabanını (db) Başlatıyoruz
+const app = initializeApp(firebaseConfig);
+const analytics = getAnalytics(app);
+const db = getFirestore(app);
 
+// 4. Ana Uygulama Kodları Başlıyor
 document.addEventListener("DOMContentLoaded", () => {
     const loader = document.getElementById('loader');
     const loginScreen = document.getElementById('login-screen');
@@ -83,7 +81,7 @@ document.addEventListener("DOMContentLoaded", () => {
         location.reload();
     });
 
-    // --- Firebase Veri Çekme (Heatmap için dailyStats eklendi) ---
+    // --- Firebase Veri Çekme (Heatmap için dailyStats) ---
     async function loadUserData(username) {
         const userRef = doc(db, "users", username);
         const docSnap = await getDoc(userRef);
@@ -121,7 +119,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 lastLogin: today,
                 status: "idle",
                 currentSubject: "1",
-                dailyStats: {} // Tarih bazlı saniye tutacak: {"2026-05-09": 3600}
+                dailyStats: {}
             };
             await setDoc(userRef, appState);
         }
@@ -163,7 +161,6 @@ document.addEventListener("DOMContentLoaded", () => {
             views.forEach(view => view.classList.remove('active'));
             document.getElementById(targetId).classList.add('active');
             
-            // Stats sekmesine geçilirse heatmap'i güncelle
             if(targetId === 'view-stats') renderHeatmap();
         });
     });
@@ -339,12 +336,10 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // --- Dinamik Heatmap Render Edilmesi ---
     function renderHeatmap() {
         const heatmap = document.getElementById('heatmap');
         heatmap.innerHTML = '';
         
-        // Son 28 günü hesapla
         const today = new Date();
         const daysArray = [];
         for(let i = 27; i >= 0; i--) {
@@ -353,7 +348,6 @@ document.addEventListener("DOMContentLoaded", () => {
             daysArray.push(d.toISOString().split('T')[0]);
         }
 
-        // Günleri kutucuk olarak çiz
         daysArray.forEach(dateStr => {
             const box = document.createElement('div');
             box.className = 'heat-box';
@@ -361,15 +355,14 @@ document.addEventListener("DOMContentLoaded", () => {
             const secondsStudied = appState.dailyStats[dateStr] || 0;
             const minutesStudied = Math.floor(secondsStudied / 60);
             
-            // Renk yoğunluğunu çalışma dakikasına göre belirle
-            let opacity = 0.05; // Hiç çalışılmadıysa
+            let opacity = 0.05; 
             if (minutesStudied > 0 && minutesStudied <= 30) opacity = 0.2;
             else if (minutesStudied > 30 && minutesStudied <= 120) opacity = 0.5;
             else if (minutesStudied > 120 && minutesStudied <= 240) opacity = 0.8;
-            else if (minutesStudied > 240) opacity = 1.0; // 4 saatten fazlaysa tam renk
+            else if (minutesStudied > 240) opacity = 1.0; 
 
             box.style.background = `rgba(124, 58, 237, ${opacity})`;
-            box.title = `${dateStr}: ${minutesStudied} dk`; // Üzerine gelince süreyi gösterir
+            box.title = `${dateStr}: ${minutesStudied} dk`;
             
             heatmap.appendChild(box);
         });
