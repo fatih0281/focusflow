@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>FocusFlow | Premium Study Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Onboarding / Loading Screen -->
+    <div id="loader" class="loader-screen">
+        <div class="loader-spinner"></div>
+        <h2>FocusFlow</h2>
+    </div>
+
+    <!-- Login Screen -->
+    <div id="login-screen" class="auth-screen hidden">
+        <div class="widget auth-card">
+            <div class="auth-logo"><i class='bx bx-brain'></i> FocusFlow</div>
+            <h2>Hoş Geldin</h2>
+            <p>Çalışma verimliliğini artırmaya başla.</p>
+            <form id="login-form">
+                <input type="text" id="username-input" placeholder="Adın veya Rumuzun" required autocomplete="off">
+                <button type="submit" class="control-btn primary w-100">Giriş Yap</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main App Container -->
+    <div class="app-container hidden" id="app">
+        <!-- Sidebar / Bottom Nav -->
+        <nav class="navbar">
+            <div class="nav-logo"><i class='bx bx-brain'></i><span>FocusFlow</span></div>
+            <div class="nav-links">
+                <a href="#" class="active" data-target="view-dashboard" data-tooltip="Dashboard"><i class='bx bx-home-alt-2'></i></a>
+                <a href="#" data-target="view-stats" data-tooltip="İstatistikler"><i class='bx bx-bar-chart-alt-2'></i></a>
+                <a href="#" data-target="view-social" data-tooltip="Sosyal & Gruplar"><i class='bx bx-group'></i></a>
+                <a href="#" data-target="view-settings" data-tooltip="Ayarlar"><i class='bx bx-cog'></i></a>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <!-- Global Header -->
+            <header class="top-header">
+                <div class="header-info">
+                    <h1 id="greeting">İyi Çalışmalar, <span id="user-display-name">Kullanıcı</span></h1>
+                    <p class="motivation-quote" id="quote">"Mantığını kavra, ezberleme."</p>
+                </div>
+                <div class="header-stats">
+                    <div class="streak-badge"><i class='bx bxs-flame'></i> <span id="streak-count">12 Gün</span></div>
+                </div>
+            </header>
+
+            <!-- VIEW 1: DASHBOARD -->
+            <div id="view-dashboard" class="view-section active dashboard-grid">
+                <!-- Timer Widget -->
+                <section class="widget timer-widget">
+                    <div class="timer-header">
+                        <select id="subject-selector" class="subject-select"></select>
+                        <button id="focus-btn" class="icon-btn" title="Tam Ekran Focus Modu"><i class='bx bx-expand-alt'></i></button>
+                    </div>
+                    
+                    <div class="timer-display-container">
+                        <svg class="progress-ring" width="240" height="240">
+                            <circle class="ring-bg" cx="120" cy="120" r="110"></circle>
+                            <circle class="ring-progress" id="timer-ring" cx="120" cy="120" r="110"></circle>
+                        </svg>
+                        <div class="timer-time" id="time-display">00:00:00</div>
+                        <div class="timer-status" id="timer-status">Oturum Bekleniyor</div>
+                    </div>
+
+                    <div class="timer-controls">
+                        <button id="start-btn" class="control-btn primary"><i class='bx bx-play'></i> Başlat</button>
+                        <button id="pause-btn" class="control-btn secondary hidden"><i class='bx bx-pause'></i> Duraklat</button>
+                        <button id="stop-btn" class="control-btn danger"><i class='bx bx-stop'></i> Bitir</button>
+                    </div>
+                </section>
+
+                <!-- Todos Widget -->
+                <section class="widget todo-widget">
+                    <div class="widget-header">
+                        <h3>Görevler</h3>
+                    </div>
+                    <form id="todo-form" class="todo-input-group">
+                        <input type="text" id="todo-input" placeholder="Yeni bir görev ekle..." autocomplete="off">
+                        <button type="submit"><i class='bx bx-plus'></i></button>
+                    </form>
+                    <ul class="todo-list" id="todo-list"></ul>
+                </section>
+            </div>
+
+            <!-- VIEW 2: STATS -->
+            <div id="view-stats" class="view-section">
+                <div class="dashboard-grid" style="grid-template-columns: 1fr; grid-template-rows: auto;">
+                    <section class="widget stats-widget">
+                        <div class="widget-header">
+                            <h3>Aktivite Geçmişi (Aylık)</h3>
+                        </div>
+                        <div class="heatmap-container" id="heatmap"></div>
+                    </section>
+                    <section class="widget">
+                         <div class="widget-header">
+                            <h3>Bugünün Özeti</h3>
+                        </div>
+                        <p style="color: var(--text-muted);">Toplam Çalışma: <strong id="total-stat-time" style="color: var(--text-main);">0 dk</strong></p>
+                    </section>
+                </div>
+            </div>
+
+            <!-- VIEW 3: SOCIAL -->
+            <div id="view-social" class="view-section">
+                <section class="widget social-widget" style="max-width: 600px;">
+                    <div class="widget-header">
+                        <h3>Çalışma Odası (Canlı)</h3>
+                        <span class="live-badge">Live</span>
+                    </div>
+                    <div class="social-list">
+                        <div class="user-card">
+                            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Melis" alt="user"></div>
+                            <div class="user-info"><h4>Melis</h4><span>Farmakoloji çalışıyor</span></div>
+                            <div class="status-indicator active"></div>
+                        </div>
+                        <div class="user-card">
+                            <div class="avatar"><img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Haluk" alt="user"></div>
+                            <div class="user-info"><h4>Haluk</h4><span>Dahiliye Vaka Analizi</span></div>
+                            <div class="status-indicator active"></div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- VIEW 4: SETTINGS -->
+            <div id="view-settings" class="view-section">
+                <section class="widget" style="max-width: 600px;">
+                    <div class="widget-header">
+                        <h3>Uygulama Ayarları</h3>
+                    </div>
+                    <div class="settings-list">
+                        <div class="setting-item">
+                            <div class="setting-info">
+                                <h4>Aydınlık Tema</h4>
+                                <p>Göz yormayan açık renk arayüz.</p>
+                            </div>
+                            <label class="switch">
+                                <input type="checkbox" id="theme-toggle">
+                                <span class="slider round"></span>
+                            </label>
+                        </div>
+                        <div class="setting-item" style="margin-top: 30px; border-top: 1px solid var(--border); padding-top: 20px;">
+                            <div class="setting-info">
+                                <h4>Hesap</h4>
+                                <p>Mevcut oturumu kapatır.</p>
+                            </div>
+                            <button id="logout-btn" class="control-btn danger" style="padding: 10px 20px;">Çıkış Yap</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Ambient Background for Focus Mode -->
+    <div id="focus-bg" class="focus-bg"></div>
+
+    <script type="module" src="app.js"></script>
+</body>
+</html>
