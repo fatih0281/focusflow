@@ -3,13 +3,13 @@ import { getFirestore, doc, setDoc, getDoc, updateDoc, collection, onSnapshot } 
 
 // KENDİ FİREBASE BİLGİLERİNİ BURAYA YAPIŞTIR
 const firebaseConfig = {
-    apiKey: "AIzaSyA2QmLBjaCFQmV6DjhoCiBG0HihY4AALXk",
-    authDomain: "focusflow-85056.firebaseapp.com",
-    projectId: "focusflow-85056",
-    storageBucket: "focusflow-85056.firebasestorage.app",
-    messagingSenderId: "221972136729",
-    appId: "1:221972136729:web:35c3526501b678038afb88"
-    measurementId: "G-K4L98YC68V"
+  apiKey: "AIzaSyA2QmLBjaCFQmV6DjhoCiBG0HihY4AALXk",
+  authDomain: "focusflow-85056.firebaseapp.com",
+  projectId: "focusflow-85056",
+  storageBucket: "focusflow-85056.firebasestorage.app",
+  messagingSenderId: "221972136729",
+  appId: "1:221972136729:web:35c3526501b678038afb88",
+  measurementId: "G-K4L98YC68V"
 };
 
 // Firebase'i Başlat
