@@ -9,7 +9,7 @@ const firebaseConfig = {
   storageBucket: "focusflow-85056.firebasestorage.app",
   messagingSenderId: "221972136729",
   appId: "1:221972136729:web:35c3526501b678038afb88",
-  measurementId: "G-K4L98YC68V"
+  //measurementId: "G-K4L98YC68V"
 };
 
 // Firebase'i Başlat
